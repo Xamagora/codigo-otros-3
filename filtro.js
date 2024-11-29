@@ -8,18 +8,20 @@ const productos = [
   {nombre: "Zapato rojo", tipo: "zapato", color: "rojo", img: "./zapato-rojo.jpg"}
 ]
 
-const li = document.getElementsByName("lista-de-productos")
-const $i = document.querySelector('.input');
 
+const li = document.getElementById("lista-de-productos") //El apartado en el html esta declarado como un Id por lo que no se llamaria con getElementsByName, si que con getElementById  
+
+
+const displayProductos = (productos) => { //función para los productos
 for (let i = 0; i < productos.length; i++) {
-  var d = document.createElement("div")
+  let d = document.createElement("div") //Cambie var por let, debido a que leí que era mas flexible que utilizar var.
   d.classList.add("producto")
 
-  var ti = document.createElement("p")
+  let ti = document.createElement("p")
   ti.classList.add("titulo")
   ti.textContent = productos[i].nombre
   
-  var imagen = document.createElement("img");
+  let imagen = document.createElement("img");
   imagen.setAttribute('src', productos[i].img);
 
   d.appendChild(ti)
@@ -27,20 +29,26 @@ for (let i = 0; i < productos.length; i++) {
 
   li.appendChild(d)
 }
-
-displayProductos(productos)
+}
+//LLamar funcion de displayProductos
+displayProductos(productos);
+//hacer constante al botón para ser utilizado.
 const botonDeFiltro = document.querySelector("button");
+const $i = document.querySelector('input'); //Para la función de filtrar 
 
-botonDeFiltro.onclick = function() {
-  while (li.firstChild) {
-    li.removeChild(li.firstChild);
-  }
+botonDeFiltro.onclick = function() { //Función que se activa al hacer click en el botón de filtro
+  li.innerHTML = '';
+  //while (li.firstChild) {
+   // li.removeChild(li.firstChild);
+  
 
-  const texto = $i.value;
-  console.log(texto);
-  const productosFiltrados = filtrado(productos, texto );
+  const texto = $i.value.toLowerCase(); //Convertimos en minusculas
+  console.log(texto); //Imprime en consola el texto obtenido
+  const productosFiltrados = filtrado(productos, texto ); //
+  displayProductos(productosFiltrados);//llamar la funcion
+}
 
-  for (let i = 0; i < productosFiltrados.length; i++) {
+ /* for (let i = 0; i < productosFiltrados.length; i++) { //Muestra la tarjeta del producto filtrado
     var d = document.createElement("div")
     d.classList.add("producto")
   
@@ -55,8 +63,9 @@ botonDeFiltro.onclick = function() {
     d.appendChild(imagen)
   
     li.appendChild(d)
-  }
-}
+  }*/ //Sobra esta parte, pues se recicla la función de displayProductos.
+ 
+
 
 const filtrado = (productos = [], texto) => {
   return productos.filter(item => item.tipo.includes(texto) || item.color.includes(texto));
